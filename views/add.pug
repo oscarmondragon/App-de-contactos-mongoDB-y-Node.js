@@ -1,0 +1,19 @@
+extends layout.pug
+
+block content
+	section.container
+		h1.header= title
+		article.item
+			form.form(method="post", action="/")
+				fieldset
+					div
+						input(type="text", name="name", placeholder="Nombre", required)
+					div
+						input(type="text", name="phone", placeholder="Telefono", required)
+					div
+						input(type="text", name="email", placeholder="Correo electronico", required)
+					div
+						input(type="text", name="facebook", placeholder="Facebook", required)
+					div
+						input.button.add(type="submit", value="Agregar")
+		a.button.show(href="/") Inicio
