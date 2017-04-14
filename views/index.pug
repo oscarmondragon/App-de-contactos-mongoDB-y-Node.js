@@ -5,6 +5,10 @@ block content
 		h1.header= title
 		img(src="contacts.jpg")
 		article.item
+			h2 Bienvenido #{user}
+			br
+			a.button.show(href="/logout") Cerrar sesión
+		article.item
 			div
 				a.button.add(href="/agregar") Agregar
 				

@@ -3,7 +3,7 @@ const express = require('express'),
     router = express.Router();
 const conn = require('../models/team-schema');
 // Ruta para mostrar la pagina de inicio y mostrar los contactos existentes
-router.get("/", function(req, res) {
+router.get("/teams", function(req, res) {
     conn.find({}, (err, docs) => {
         if (!err) {
             res.render("index", {
@@ -22,7 +22,7 @@ router.get('/agregar', function(req, res) {
     });
 });
 // Ruta para crear un contacto
-router.post('/', function(req, res) {
+router.post('/teams', function(req, res) {
     let contacto = {
         _id: (req.body._id || null),
         name: req.body.name,
@@ -95,13 +95,5 @@ router.delete('/eliminar/:_id', function(req, res) {
         }
     });
 });
-//se hace un middleware para los errores 
-router.use((req, res, next) => {
-    let err = new Error();
-    err.status = 404;
-    err.statusText = 'NOT FOUND';
-    res.render('error', {
-        error: err
-    });
-});
+
 module.exports = router;
