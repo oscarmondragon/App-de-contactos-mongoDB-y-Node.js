@@ -19,6 +19,33 @@ router.get("/login", function(req, res) {
 });
 router.post("/login", function(req, res) {
     let user = {
+            username: req.body.username,
+            password: req.body.password
+        };
+
+        console.log(user);
+         conn
+         .findOne({
+                username : user.username,
+                password : user.password
+            })
+            .exec((err, docs) => {
+                if (err) throw err;
+              
+            req.session.username = ( docs != null ) ? user.username : null;
+
+            console.log(req.session, '---', docs);
+
+            return (req.session.username)
+                ? res.redirect('/teams')
+                : errors.http401(req, res);
+        
+            });
+
+
+
+
+    /*let user = {
         username: req.body.username,
         password: req.body.password
     };
@@ -32,7 +59,7 @@ router.post("/login", function(req, res) {
         return (req.session.username) 
             ? res.redirect('/teams') 
             : errors.http401(req, res);
-    });
+    });*/
 });
 router.get("/signin", function(req, res) {
     res.render('signin-form', {
@@ -48,8 +75,7 @@ router.post("/signin", function(req, res) {
     console.log(user);
     conn.create(user, (err) => {
         if (!err) {
-            res.redirect(`/?message=El usuario ${user.username} 
-                ha sido creado`);
+            res.redirect(`/?message=El usuario ${user.username} ha sido creado`);
         } else {
             console.log("Error al crear usuario");
         }
