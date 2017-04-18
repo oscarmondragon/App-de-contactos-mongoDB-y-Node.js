@@ -1,99 +1,19 @@
 'use strict';
-const express = require('express'),
+const TeamController = require('../controllers/team-controller'),express = require('express'),
     router = express.Router();
 const conn = require('../models/team-schema');
+ const tc = new TeamController();
 // Ruta para mostrar la pagina de inicio y mostrar los contactos existentes
-router.get("/teams", function(req, res) {
-    conn.find({}, (err, docs) => {
-        if (!err) {
-            res.render("index", {
-                title: 'Agenda de contactos',
-                data: docs
-            });
-        } else {
-            console.log(err);
-        }
-    })
-});
+router.get("/teams",tc.getAll);
 // Ruta para mostrar formulario para agregar un contacto
-router.get('/agregar', function(req, res) {
-    res.render('add', {
-        title: 'Agregar Contacto'
-    });
-});
+router.get('/agregar', tc.addForm);
 // Ruta para crear un contacto
-router.post('/teams', function(req, res) {
-    let contacto = {
-        _id: (req.body._id || null),
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        facebook: req.body.facebook
-    };
-    console.log(contacto);
-   
-                conn.create(contacto, (err) => {
-                    if (!err) {
-                        res.redirect('/');
-                    } else {
-                        console.log("Error en create(contacto)");
-                    }
-                });
-           });
+router.post('/teams', tc.save);
 // Ruta para editar contactos
-router.get('/editar/:_id', function(req, res) {
-    conn.findOne({
-        _id: req.params._id
-    }, (err, docs) => {
-        if (!err) {
-            res.render('edit', {
-                title: 'Editar Contacto',
-                data: docs
-            });
-        } else {
-            console.log(err);
-        }
-    });
-});
+router.get('/editar/:_id', tc.getOne);
 // Ruta para actualizar los contactos
-router.put('/actualizar/:_id', function(req, res) {
-    let contacto = {
-        _id: (req.body._id || null),
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        facebook: req.body.facebook
-    };
-    console.log(contacto);
-                conn.findOneAndUpdate({
-                    _id: contacto._id
-                }, {
-                      name: contacto.name,
-                    phone: contacto.phone,
-                    email: contacto.email,
-                    facebook: contacto.facebook
-                }, (err) => {
-                    if (!err) {
-                        res.redirect('/');
-                    } else {
-                        console.log("Error en actualizar contacto)");
-                    }
-                });
-            
-});
+router.put('/actualizar/:_id', tc.save);
 //Ruta para eliminar un contacto
-router.delete('/eliminar/:_id', function(req, res) {
-    let _id = req.params._id;
-    console.log(_id);
-    conn.remove({
-        _id: _id
-    }, (err) => {
-        if (!err) {
-            res.redirect('/');
-        } else {
-            console.log("Error al eliminar contacto");
-        }
-    });
-});
+router.delete('/eliminar/:_id',tc.delete);
 
 module.exports = router;

@@ -1,8 +1,7 @@
 'use strict';
-var email_match = [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Coloca un email valido"];
 const mongoose = require('./model'),
     Schema = mongoose.Schema,
-        UserSchema = new Schema({
+    UserSchema = new Schema({
         username: String,
         password: String
     }, {
